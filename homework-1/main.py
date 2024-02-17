@@ -38,6 +38,19 @@ try:
             for row in rows:
                 print(row)
 
+            for emp in employees_data:
+                cur.execute('INSERT INTO employees VALUES (%s,%s,%s,%s,%s,%s) ON CONFLICT (employee_id) DO NOTHING', (
+                    emp['employee_id'], emp['first_name'], emp['last_name'], emp["title"], emp["birth_date"],
+                    emp['notes']))
+                conn.commit()
+            cur.execute("SELECT * FROM employees")
+            rows = cur.fetchall()
+
+            '''вывод таблицы'''
+
+            for row in rows:
+                print(row)
+
             for ord in orders_data:
                 cur.execute('INSERT INTO orders VALUES (%s,%s,%s,%s,%s) ON CONFLICT (order_id) DO NOTHING',
                             (ord['order_id'], ord['customer_id'], ord['employee_id'], ord['order_date'],
@@ -51,17 +64,5 @@ try:
             for row in rows:
                 print(row)
 
-            for emp in employees_data:
-                cur.execute('INSERT INTO employees VALUES (%s,%s,%s,%s,%s,%s) ON CONFLICT (employee_id) DO NOTHING', (
-                    emp['employee_id'], emp['first_name'], emp['last_name'], emp["title"], emp["birth_date"],
-                    emp['notes']))
-                conn.commit()
-            cur.execute("SELECT * FROM employees")
-            rows = cur.fetchall()
-
-            '''вывод таблицы'''
-
-            for row in rows:
-                print(row)
 finally:
     conn.close()
